@@ -1,27 +1,58 @@
-class Solution {
-    public int findCircleNum(int[][] isConnected) {
-        int n = isConnected[0].length;
-        boolean[] vis = new boolean[n+1];
+class Dsu{
+    private int[] size;
+    private int[] parent;
+    int cnt;
 
-        int cnt = 0;
+    Dsu(int n){
+        size = new int[n];
+        parent = new int[n];
+        cnt = n;
 
-        for(int i=1;i<=n;i++){
-            if(!vis[i]){
-                cnt++;
-                dfs(i-1,isConnected,vis);
-            }
+        Arrays.fill(size,1);
+
+        for(int i=0;i<n;i++){
+            parent[i] = i;
         }
-
-        return cnt;
     }
 
-    public void dfs(int node,int[][] isConnected,boolean[] vis){
-        vis[node+1] = true;
+    public int findParent(int a){
+        if(parent[a] == a)return a;
 
-        for(int i=0;i<isConnected[node].length;i++){
-            if(!vis[i+1] && isConnected[node][i] == 1){
-                dfs(i,isConnected,vis);
+        return parent[a] = findParent(parent[a]);
+    }
+
+    public void union(int a,int b){
+        int ulpA = findParent(a);
+        int ulpB = findParent(b);
+
+        int sizeA = size[ulpA];
+        int sizeB = size[ulpB];
+
+        if(ulpA == ulpB)return;
+
+        if(sizeA < sizeB){
+            parent[ulpA] = ulpB;
+            size[ulpB] += sizeA;
+        }
+        else{
+            parent[ulpB] = ulpA;
+            size[ulpA] += sizeB;
+        }
+
+        cnt--;
+    }
+}
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        int n = isConnected.length;
+        Dsu dsu = new Dsu(n);
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(isConnected[i][j] == 1)dsu.union(i,j);
             }
         }
+
+        return dsu.cnt;
     }
 }
