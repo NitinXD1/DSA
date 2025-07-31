@@ -13,7 +13,7 @@ class Solution {
             st.add(i[0] * n + i[1]);
         }
 
-        Queue<Integer> q = new LinkedList<>();
+        Queue<Integer> q = new ArrayDeque<>();
         q.offer(0);
 
         boolean[] vis = new boolean[n];
