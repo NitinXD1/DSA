@@ -14,7 +14,7 @@ class Solution {
         int left = 0;
         int right = potions.length-1;
 
-        int n = potions.length-1;
+        int n = potions.length;
 
         int ans = -1;
 
@@ -30,6 +30,6 @@ class Solution {
             }
         }
 
-        return ans == -1 ? 0 : n - ans + 1;
+        return ans == -1 ? 0 : n - ans;
     }
 }
