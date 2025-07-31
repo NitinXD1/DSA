@@ -1,6 +1,6 @@
 class Solution {
     public int minReorder(int n, int[][] connections) {
-        HashSet<String> st = new HashSet<>();
+        HashSet<Integer> st = new HashSet<>();
         List<List<Integer>> adj = new ArrayList<>();
 
         for(int i=0;i<n;i++){
@@ -10,7 +10,7 @@ class Solution {
         for(int[] i:connections){
             adj.get(i[0]).add(i[1]);
             adj.get(i[1]).add(i[0]);
-            st.add(i[0] + " " + i[1]);
+            st.add(i[0] * n + i[1]);
         }
 
         Queue<Integer> q = new LinkedList<>();
@@ -26,8 +26,7 @@ class Solution {
 
             for(int adjNode : adj.get(curr)){
                 if(!vis[adjNode]){
-                    String key = curr + " " + adjNode;
-                    if(st.contains(key))cnt++;
+                    if(st.contains(curr * n + adjNode))cnt++;
                     q.offer(adjNode);
                     vis[adjNode] = true;
                 }
