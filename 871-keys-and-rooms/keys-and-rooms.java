@@ -13,8 +13,6 @@ class Solution {
     }
 
     public void dfs(int node,List<List<Integer>> rooms,boolean[] vis){
-        if(vis[node])return;
-
         vis[node] = true;
 
         for(int key : rooms.get(node)){
@@ -22,7 +20,5 @@ class Solution {
                 dfs(key,rooms,vis);
             }
         }
-
-        return;
     }
 }
