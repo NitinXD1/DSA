@@ -4,6 +4,14 @@ class Solution {
         int n = grid.length; int m = grid[0].length;
         PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> Integer.compare(a[2],b[2]));
 
+        int[][] distance = new int[n][m];
+
+        for(int[] i:distance){
+            Arrays.fill(i,Integer.MAX_VALUE);
+        }
+
+        distance[0][0] = 0;
+
         pq.offer(new int[]{0,0,1});
 
         int[] drow = {0,1,0,-1,1,-1,1,-1};
@@ -13,24 +21,21 @@ class Solution {
             int[] curr = pq.poll();
             int r = curr[0];
             int c = curr[1];
-            int s = curr[2];
-
-            if(grid[r][c] == 1)continue;
-
-            grid[r][c] = 1;
-
-            if(r == n-1 && c == m-1)return s;
+            int dist = curr[2];
 
             for(int i=0;i<8;i++){
-                int adjR = r + drow[i];
-                int adjC = c + dcol[i];
+                int newR = r + drow[i];
+                int newC = c + dcol[i];
 
-                if(adjR >= 0 && adjR < n && adjC >= 0 && adjC < m && grid[adjR][adjC] == 0){
-                    pq.offer(new int[]{adjR,adjC,s+1});
+                if (r == n - 1 && c == n - 1) return dist;
+
+                if(newR >= 0 && newR < n && newC >=0 && newC < m && grid[newR][newC] == 0 && distance[newR][newC] > dist + 1){                 
+                    distance[newR][newC] = dist+1;
+                    pq.offer(new int[]{newR,newC,dist+1});
                 }
             }
 
         }
-        return -1;
+        return distance[n-1][n-1] == Integer.MAX_VALUE ? -1 : distance[n-1][n-1];
     }
 }
