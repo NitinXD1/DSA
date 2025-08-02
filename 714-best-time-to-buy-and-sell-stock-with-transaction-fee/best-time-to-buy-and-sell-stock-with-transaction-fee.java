@@ -3,28 +3,27 @@ class Solution {
         int n = prices.length;
         int[][] dp = new int[n][2];
 
-        for(int[] i:dp)Arrays.fill(i,-1);
+        dp[n-1][1] = 0; 
+        dp[n-1][0] = Math.max(prices[n-1]-fee,0);
 
-        return helper(0,1,prices,fee,dp);
-    }
+        for(int i=n-2;i>=0;i--){
+            for(int j=0;j<2;j++){
+                int skip = dp[i+1][j];
+                int profit = 0;
 
-    public int helper(int index,int buy,int[] prices,int fee,int[][] dp){
-        if(index == prices.length)return 0;
+                if(j==1){
+                    int invest = -prices[i] + dp[i+1][0];
+                    profit = Math.max(invest,skip); 
+                }
+                else{
+                    int sell = prices[i] - fee + dp[i+1][1];
+                    profit = Math.max(sell,skip);
+                }
 
-        if(dp[index][buy] != -1)return dp[index][buy];
-        
-        int skip = helper(index+1,buy,prices,fee,dp);
-        int profit = 0;
-
-        if(buy == 1){
-            int invest = -prices[index] + helper(index+1,0,prices,fee,dp);
-            profit = Math.max(skip,invest);
+                dp[i][j] = profit;
+            }
         }
-        else{
-            int sell = prices[index] - fee + helper(index+1,1,prices,fee,dp);
-            profit = Math.max(sell,skip);
-        }
 
-        return dp[index][buy] = profit;
+        return dp[0][1];
     }
 }
