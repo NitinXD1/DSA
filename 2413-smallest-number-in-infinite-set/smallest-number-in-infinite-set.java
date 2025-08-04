@@ -1,26 +1,19 @@
 class SmallestInfiniteSet {
     PriorityQueue<Integer> pq;
-    int[] hash = new int[1001];
     public SmallestInfiniteSet() {
         pq = new PriorityQueue<>();
 
         for(int i=1;i<=1000;i++){
             pq.offer(i);
         }
-
-        Arrays.fill(hash,1);
     }
     
     public int popSmallest() {
-        int val = pq.poll();
-        hash[val]--;
-        return val;
+        return pq.poll();
     }
     
     public void addBack(int num) {
-        if(hash[num] == 1)return;
-        pq.offer(num);
-        hash[num] = 1;
+        if(!pq.contains(num))pq.offer(num);
     }
 }
 
