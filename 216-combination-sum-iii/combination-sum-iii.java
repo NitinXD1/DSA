@@ -2,7 +2,7 @@ class Solution {
     public List<List<Integer>> combinationSum3(int k, int n) {
         boolean[] used = new boolean[10];
 
-        HashSet<List<Integer>> ans = new HashSet<>();
+        List<List<Integer>> ans = new ArrayList<>();
 
         helper(1,ans,new ArrayList<>(),k,n,used);
 
@@ -11,7 +11,7 @@ class Solution {
         return main;
     }
 
-    public void helper(int curr,HashSet<List<Integer>> ans,List<Integer> currLs,int k,int n,boolean[] used){
+    public void helper(int curr,List<List<Integer>> ans,List<Integer> currLs,int k,int n,boolean[] used){
         if(k == 0){
             if(n == 0){
                 ans.add(new ArrayList<>(currLs));
