@@ -1,23 +1,23 @@
 class Solution {
     int mod = 1000000007;
+
     public int numberOfWays(int n, int x) {
         int[][] dp = new int[n+1][n+1];
 
-        for(int[] i: dp)Arrays.fill(i,-1);
+        for(int i=0;i<=n;i++)dp[i][0] = 1;
 
-        return helper(1,n,x,dp);
-    }
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<=n;j++){
+                int leave = dp[i-1][j];
+                int take = 0;
+                if(j - Math.pow(i,x) >= 0){
+                    take = dp[i-1][j - (int)Math.pow(i,x)];
+                }
 
-    public int helper(int ind,int n,int x,int[][] dp){
-        if(ind > n)return 0;
-        if(n == 0 || Math.pow(ind,x) == n)return 1;
+                dp[i][j] = (leave + take) % mod;
+            }
+        }
 
-        if(dp[ind][n] != -1)return dp[ind][n];
-
-        int leave = helper(ind+1,n,x,dp);
-        int take = 0;
-        if(n - (int)Math.pow(ind,x) >= 0)take = helper(ind+1,n-(int)Math.pow(ind,x),x,dp);
-
-        return dp[ind][n] = (leave + take) % mod;
+        return dp[n][n];
     }
 }
