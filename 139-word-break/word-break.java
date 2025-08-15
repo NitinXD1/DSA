@@ -3,26 +3,27 @@ class Solution {
         int n = s.length();
         HashSet<String> dict = new HashSet<>(wordDict);
 
-        boolean[][] dp = new boolean[n + 1][n + 1];
+        boolean[] dp = new boolean[n + 1];
 
-        for (int end = 0; end <= n; end++) {
-            dp[n][end] = (end == n);
-        }
+        dp[n] = true;
 
         for (int start = n - 1; start >= 0; start--) {
+            boolean[] temp = new boolean[n+1];
             for (int end = n; end >= 0; end--) {
 
-                boolean leave = dp[start + 1][end];
+                boolean leave = dp[end];
                 boolean take = false;
 
                 if (end <= start && dict.contains(s.substring(end, start + 1))) {
-                    take = dp[start + 1][start + 1];
+                    take = dp[start + 1];
                 }
 
-                dp[start][end] = leave || take;
+                temp[end] = leave || take;
             }
+
+            dp = temp;
         }
 
-        return dp[0][0];
+        return dp[0];
     }
 }
