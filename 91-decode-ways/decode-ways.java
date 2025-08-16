@@ -7,26 +7,21 @@ class Solution {
         }
 
         int n = s.length();
-        int[][] dp = new int[n][n];
+        int[][] dp = new int[n+1][n+1];
+        dp[n][n] = 1;
 
-        for(int[] i:dp)Arrays.fill(i,-1);
+        for(int i=n-1;i>=0;i--){
+            for(int j=n-1;j>=0;j--){
+                int leave = dp[i+1][j];
+                int take = 0;
+                if(i >= j && st.contains(s.substring(j,i+1))){
+                    take = dp[i+1][i+1];
+                }
 
-        return helper(0,0,st,s,dp);
-    }
-
-    public int helper(int start,int end,HashSet<String> st,String s,int[][] dp){
-        if(start == s.length()){
-            return end == s.length() ? 1 : 0;
+                dp[i][j] = leave + take;
+            }
         }
 
-        if(dp[start][end] != -1)return dp[start][end];
-
-        int leave = helper(start+1,end,st,s,dp);
-        int take = 0;
-        if(st.contains(s.substring(end,start+1))){
-            take = helper(start+1,start+1,st,s,dp);
-        }
-
-        return dp[start][end] = leave + take;
+        return dp[0][0];
     }
 }
