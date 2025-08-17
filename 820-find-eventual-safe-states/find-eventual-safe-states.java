@@ -8,37 +8,45 @@ class Solution {
             adj.add(new ArrayList<>());
         }
 
-        int[] inDegree = new int[n];
+        boolean[] vis = new boolean[n];
+        boolean[] pathVis = new boolean[n];
 
         for(int i=0;i<n;i++){
             for(int j=0;j<graph[i].length;j++){
-                adj.get(graph[i][j]).add(i);
-                inDegree[i]++;
+                adj.get(i).add(graph[i][j]);
             }
         }
 
-        Queue<Integer> q = new LinkedList<>();
-
         for(int i=0;i<n;i++){
-            if(inDegree[i] == 0){
-                q.offer(i);
+            if(!vis[i]){
+                helper(i,vis,pathVis,adj);
             }
         }
 
         List<Integer> ans = new ArrayList<>();
 
-        while(!q.isEmpty()){
-            int node = q.poll();
-            ans.add(node);
-
-            for(int adjNode : adj.get(node)){
-                if(--inDegree[adjNode] == 0)q.offer(adjNode);
+        for(int i=0;i<n;i++){
+            if(vis[i] && !pathVis[i]){
+                ans.add(i);
             }
-
         }
 
-        Collections.sort(ans);
-
         return ans;
+    }
+
+    public boolean helper(int node,boolean[] vis,boolean[] pathVis,List<List<Integer>> adj){
+        vis[node] = true;
+        pathVis[node] = true;
+
+        for(int adjNode : adj.get(node)){
+            if(!vis[adjNode]){
+                if(!helper(adjNode,vis,pathVis,adj))return false;
+            }
+            else if(pathVis[adjNode])return false;
+        }
+
+        pathVis[node] = false;
+
+        return true;
     }
 }
