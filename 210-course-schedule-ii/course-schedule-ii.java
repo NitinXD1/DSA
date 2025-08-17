@@ -1,50 +1,41 @@
 class Solution {
     public int[] findOrder(int n, int[][] preq) {
-       List<List<Integer>> adj = new ArrayList<>();
+        List<List<Integer>> adj = new ArrayList<>();
 
         for(int i=0;i<n;i++){
             adj.add(new ArrayList<>());
         }
 
+        int[] inDegree = new int[n];
+
         for(int[] i:preq){
             adj.get(i[1]).add(i[0]);
+            inDegree[i[0]]++;
         }
 
-        boolean[] vis = new boolean[n];
-        boolean[] pathVis = new boolean[n];
 
-        Stack<Integer> st = new Stack<>();
+        Queue<Integer> q = new LinkedList<>();
 
         for(int i=0;i<n;i++){
-            if(!vis[i]){
-                if(!dfs(i,adj,vis,pathVis,st))return new int[0];
+            if(inDegree[i] == 0)q.offer(i);
+        }
+        
+        List<Integer> ans = new ArrayList<>();
+
+        while(!q.isEmpty()){
+            int node = q.poll();
+            ans.add(node);
+
+            for(int adjNode : adj.get(node)){
+                if(--inDegree[adjNode] == 0){
+                    q.offer(adjNode);
+                }
             }
         }
 
-        int[] ans = new int[n];
-        int i=0;
-        while(!st.isEmpty()){
-            ans[i++] = st.pop();
-        }
+        if(ans.size() != n)return new int[0];
 
-        return ans;
+        return ans.stream().mapToInt(i -> i).toArray();        
     }
 
-    public boolean dfs(int node,List<List<Integer>> adj,boolean[] vis,boolean[] pathVis,Stack<Integer> st){
-        vis[node] = true;
-        pathVis[node] = true;
-
-        for(int adjNode : adj.get(node)){
-            if(!vis[adjNode]){
-                if(!dfs(adjNode,adj,vis,pathVis,st))return false;
-            }
-            else if(pathVis[adjNode])return false;
-        }
-
-        pathVis[node] = false;
-
-        st.push(node);
-
-        return true;
-    }
 }
