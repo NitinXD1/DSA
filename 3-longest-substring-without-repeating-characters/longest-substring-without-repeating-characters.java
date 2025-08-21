@@ -4,14 +4,14 @@ class Solution {
         int right = 0;
         int n = s.length(); 
 
-        HashMap<Character,Integer> hash = new HashMap<>();
+        int[] hash = new int[126];
         int ans = 0;
 
         while(right < n){
-            hash.put(s.charAt(right),hash.getOrDefault(s.charAt(right),0) + 1);
+            hash[s.charAt(right) - ' ']++;
 
-            while(hash.get(s.charAt(right)) > 1){
-                hash.put(s.charAt(left),hash.get(s.charAt(left))-1);
+            while(hash[s.charAt(right) - ' '] > 1){
+                hash[s.charAt(left) - ' ']--;
                 left++;
             }
 
