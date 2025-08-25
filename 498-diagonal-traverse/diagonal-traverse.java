@@ -1,52 +1,47 @@
 class Solution {
     public int[] findDiagonalOrder(int[][] mat) {
-        if (mat == null || mat.length == 0 || mat[0].length == 0) return new int[0];
-        
-        List<Integer> ans = new ArrayList<>();
         int n = mat.length;
         int m = mat[0].length;
 
-        boolean flag = false;
+        int[] ans = new int[n * m];
+        int index = 0;
 
-        for(int i=0;i<n;i++){
-            List<Integer> r = new ArrayList<>();
-            for(int k=0; k<=i && k<m; k++){
-                r.add(mat[i-k][k]);
-            }
-            
-            if(!flag){
-                flag = true;
-            }
-            else{
-                flag = false;
-                Collections.reverse(r);
-            }
+        int r = 0;
+        int c = 0;
+        boolean up = true;
 
-            ans.addAll(r);
+        while (index < n * m) {
+            if (up) {
+                while (r >= 0 && c < m) {
+                    ans[index++] = mat[r][c];
+                    r--;
+                    c++;
+                }
+
+                if (c >= m) { 
+                    c = m - 1;
+                    r += 2;
+                } else {
+                    r = 0;
+                }
+                up = false;
+            } else {
+                while (r < n && c >= 0) {
+                    ans[index++] = mat[r][c];
+                    r++;
+                    c--;
+                }
+                
+                if (r >= n) {
+                    r = n - 1;
+                    c += 2;
+                } else {
+                    c = 0;
+                }
+                up = true;
+            }
         }
 
-        for(int j=1;j<m;j++){
-            
-            int i = n-1;
-            List<Integer> r = new ArrayList<>();
-            int k = 0;
-
-            while(i-k >= 0 && j+k < m){
-                r.add(mat[i-k][j+k]);
-                k++;
-            }
-            
-            if(!flag){
-                flag = true;
-            }
-            else{
-                flag = false;
-                Collections.reverse(r);
-            }
-
-            ans.addAll(r);
-        }
-
-        return ans.stream().mapToInt(x -> x).toArray();
+        return ans;
     }
 }
