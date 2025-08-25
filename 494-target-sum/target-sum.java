@@ -5,23 +5,24 @@ class Solution {
 
         if(sum < Math.abs(target))return 0;
 
-        int[][] dp = new int[n][sum * 2 + 1];
+        int[][] dp = new int[n+1][sum * 2 + 1];
 
-        for(int[] i:dp)Arrays.fill(i,-1);
+        dp[n][target+sum] = 1;
 
-        return helper(0,0,target,sum,nums,dp);
-    }
+        for(int i=n-1;i>=0;i--){
+            for(int j=-sum;j<=sum;j++){
+                int ways = 0;
 
-    public int helper(int index,int curr,int target,int sum,int[] nums,int[][] dp){
-        if(index == nums.length){
-            return curr == target ? 1 : 0;
+                if (j + nums[i] + sum <= 2 * sum)
+                    ways += dp[i + 1][j + nums[i] + sum];
+
+                if (j - nums[i] + sum >= 0)
+                    ways += dp[i + 1][j - nums[i] + sum];
+
+                dp[i][j + sum] = ways;
+            }
         }
 
-        if(dp[index][curr + sum] != -1)return dp[index][curr + sum];
-
-        int add = helper(index+1,curr+nums[index],target,sum,nums,dp);
-        int sub = helper(index+1,curr-nums[index],target,sum,nums,dp);
-
-        return dp[index][curr + sum] = add + sub;
+        return dp[0][sum];
     }
 }
