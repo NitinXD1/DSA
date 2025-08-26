@@ -15,15 +15,18 @@
  */
 class Solution {
     public int sumNumbers(TreeNode root) {
-        return helper(root,root.val);
+        int[] sum = new int[1];
+        helper(0,root,sum);
+        return sum[0];
     }
 
-    public int helper(TreeNode root,int curr){
-        if(root.left == null && root.right == null)return curr;
+    public void helper(int curr,TreeNode root,int[] sum){
+        if(root.left == null && root.right == null){
+            sum[0] += curr*10 + root.val;
+            return;
+        }
 
-        int left = root.left != null ? helper(root.left , curr * 10 + root.left.val) : 0;
-        int right = root.right != null ? helper(root.right , curr * 10 + root.right.val) : 0;
-
-        return left + right;
+        if(root.left != null)helper(curr*10+root.val,root.left,sum);
+        if(root.right != null)helper(curr*10+root.val,root.right,sum);
     }
 }
