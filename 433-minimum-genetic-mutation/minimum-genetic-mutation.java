@@ -19,15 +19,22 @@ class Solution {
 
                 if(str.equals(end))return steps;
 
+                char[] word = str.toCharArray();
+
                 for(int i=0;i<8;i++){
+                    char original = word[i]; 
+                    
                     for(char ch:arr){
-                        String newStr = str.substring(0,i) + ch + str.substring(i+1,8);
+                        word[i] = ch;
+                        String newStr = new String(word);
 
                         if(st.contains(newStr)){
                             q.offer(newStr);
                             st.remove(newStr);
                         }
                     }
+
+                    word[i] = original;
                 }
             }
             steps++;
