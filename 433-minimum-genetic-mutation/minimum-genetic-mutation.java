@@ -1,4 +1,14 @@
 class Solution {
+    class Pair{
+        String s;
+        int val;
+
+        Pair(String s,int val){
+            this.s = s;
+            this.val = val;
+        }
+    }
+
     public int minMutation(String start, String end, String[] bank) {
         HashSet<String> st = new HashSet<>();
 
@@ -6,14 +16,14 @@ class Solution {
 
         char[] arr = {'A','C','G','T'};
 
-        Queue<String[]> q = new LinkedList<>();
+        Queue<Pair> q = new LinkedList<>();
 
-        q.offer(new String[]{start,"0"});
+        q.offer(new Pair(start,0));
 
         while(!q.isEmpty()){
-            String[] s = q.poll();
-            String str = s[0];
-            int num = Integer.parseInt(s[1]);
+            Pair p = q.poll();
+            String str = p.s;
+            int num = p.val;
 
             if(str.equals(end))return num;
 
@@ -22,7 +32,7 @@ class Solution {
                     String newStr = str.substring(0,i) + ch + str.substring(i+1,8);
 
                     if(st.contains(newStr)){
-                        q.offer(new String[]{newStr,String.valueOf(num+1)});
+                        q.offer(new Pair(newStr,num+1));
                         st.remove(newStr);
                     }
                 }
