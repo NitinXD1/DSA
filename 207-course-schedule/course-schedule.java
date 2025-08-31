@@ -1,8 +1,8 @@
 class Solution {
-    public boolean canFinish(int n, int[][] preq) {
+    public boolean canFinish(int numCourses, int[][] preq) {
         List<List<Integer>> adj = new ArrayList<>();
 
-        for(int i=0;i<n;i++){
+        for(int i=0;i<numCourses;i++){
             adj.add(new ArrayList<>());
         }
 
@@ -10,31 +10,30 @@ class Solution {
             adj.get(i[1]).add(i[0]);
         }
 
-        boolean[] vis = new boolean[n];
-        boolean[] pathVis = new boolean[n];
+        boolean[] vis = new boolean[numCourses];
+        boolean[] pathVis = new boolean[numCourses];
 
-        for(int i=0;i<n;i++){
+        for(int i=0;i<numCourses;i++){
             if(!vis[i]){
-                if(!dfs(i,adj,vis,pathVis))return false;
+                if(!helper(i,vis,adj,pathVis))return false;
             }
         }
 
         return true;
     }
 
-    public boolean dfs(int node,List<List<Integer>> adj,boolean[] vis,boolean[] pathVis){
-        vis[node] = true;
-        pathVis[node] = true;
+    public boolean helper(int index,boolean[] vis,List<List<Integer>> adj,boolean[] pathVis){
+        vis[index] = true;
+        pathVis[index] = true;
 
-        for(int adjNode : adj.get(node)){
-            if(!vis[adjNode]){
-                if(!dfs(adjNode,adj,vis,pathVis))return false;
+        for(int adjIndex : adj.get(index)){
+            if(!vis[adjIndex]){
+                if(!helper(adjIndex,vis,adj,pathVis))return false;
             }
-            else if(pathVis[adjNode])return false;
+            else if(pathVis[adjIndex])return false;
         }
 
-        pathVis[node] = false;
-
+        pathVis[index] = false;
         return true;
     }
 }
