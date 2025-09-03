@@ -1,41 +1,46 @@
 class Solution {
     public int shortestPathBinaryMatrix(int[][] grid) {
-        if(grid[0][0] == 1)return -1;
-        int n = grid.length; int m = grid[0].length;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> Integer.compare(a[2],b[2]));
+        int n = grid.length;
 
-        int[][] distance = new int[n][m];
+        if(grid[0][0] == 1 || grid[n-1][n-1] == 1)return -1;
 
-        for(int[] i:distance){
-            Arrays.fill(i,Integer.MAX_VALUE);
-        }
+        boolean[][] vis = new boolean[n][n];
+        // for(int[] i:vis)Arrays.fill(i,Integer.MAX_VALUE);
 
-        distance[0][0] = 0;
+        Queue<int[]> q = new LinkedList<>();
 
-        pq.offer(new int[]{0,0,1});
+        q.offer(new int[]{0,0});
 
-        int[] drow = {0,1,0,-1,1,-1,1,-1};
-        int[] dcol = {1,0,-1,0,1,-1,-1,1};
+        int[] drow = {1,-1,-1,1,0,-1,0,1};
+        int[] dcol = {1,-1,1,-1,1,0,-1,0};
 
-        while(!pq.isEmpty()){
-            int[] curr = pq.poll();
-            int r = curr[0];
-            int c = curr[1];
-            int dist = curr[2];
+        int cnt = 1;
+        while(!q.isEmpty()){
+            int size = q.size();
 
-            for(int i=0;i<8;i++){
-                int newR = r + drow[i];
-                int newC = c + dcol[i];
+            for(int k=0;k<size;k++){
+                int[] curr = q.poll();
+                int r = curr[0];
+                int c = curr[1];
 
-                if (r == n - 1 && c == n - 1) return dist;
+                if(r == n-1 && c == n-1)return cnt;
 
-                if(newR >= 0 && newR < n && newC >=0 && newC < m && grid[newR][newC] == 0 && distance[newR][newC] > dist + 1){                 
-                    distance[newR][newC] = dist+1;
-                    pq.offer(new int[]{newR,newC,dist+1});
+                if(vis[r][c])continue;
+                
+                vis[r][c] = true;
+
+                for(int i=0;i<8;i++){
+                    int adjR = r + drow[i];
+                    int adjC = c + dcol[i];
+
+                    if(adjR >= 0 && adjR < n && adjC >= 0 && adjC < n && grid[adjR][adjC] == 0){
+                        q.offer(new int[]{adjR,adjC});
+                    }
                 }
             }
-
+            cnt++;
         }
-        return distance[n-1][n-1] == Integer.MAX_VALUE ? -1 : distance[n-1][n-1];
+
+        return -1; 
     }
 }
