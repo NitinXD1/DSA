@@ -20,6 +20,8 @@ class Solution {
             int node = curr[0];
             int cost = curr[1];
 
+            if(cost > dist[node])continue;
+
             for(int[] adjArr : adj.get(node)){
                 int adjNode = adjArr[0];
                 int adjCost = adjArr[1];
