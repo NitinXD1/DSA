@@ -1,29 +1,41 @@
 class Solution {
     public String longestPalindrome(String s) {
-        int n = s.length();
+        int[][] dp = new int[s.length()][s.length()];
+        for(int[] i:dp)Arrays.fill(i,-1);
 
-        String ans = "";
-        for(int i=0;i<n;i++){
-            for(int j=0;j<=i;j++){
-                if(isPalindrome(s,j,i)){
-                    if(i-j+1 > ans.length()){
-                        ans = s.substring(j,i+1);
-                    }
-                }
-            }
-        }
+        int[] ans = new int[]{0,0};
 
-        return ans;
+        helper(0,s.length()-1,s,dp,ans);
+
+        return s.substring(ans[0],ans[1]+1);
     }
 
-    public boolean isPalindrome(String s,int st,int en){
-        
-        while(st < en){
-            if(s.charAt(st) != s.charAt(en))return false;
-            st++;
-            en--;
+    public void helper(int i,int j,String s,int[][] dp,int[] ans){
+        if(i>j) return;
+
+        if(dp[i][j] != -1) return;
+
+        if(check(i,j,s)){
+            int gap = j-i+1;
+            if(gap>ans[1]-ans[0]){
+                ans[0] = i;
+                ans[1] = j;
+            }
+            dp[i][j] = 1;
+            return;
         }
 
+        helper(i+1,j,s,dp,ans);
+        helper(i,j-1,s,dp,ans);
+
+        dp[i][j] = 0;
+    }
+
+    public boolean check(int s,int e,String str){
+        while(s<e){
+            if(str.charAt(s) != str.charAt(e)) return false;
+            s++; e--;
+        }
         return true;
     }
 }
