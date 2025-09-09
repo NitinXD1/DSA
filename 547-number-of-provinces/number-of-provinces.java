@@ -1,58 +1,38 @@
-class Dsu{
-    private int[] size;
-    private int[] parent;
-    int cnt;
-
-    Dsu(int n){
-        size = new int[n];
-        parent = new int[n];
-        cnt = n;
-
-        Arrays.fill(size,1);
-
-        for(int i=0;i<n;i++){
-            parent[i] = i;
-        }
-    }
-
-    public int findParent(int a){
-        if(parent[a] == a)return a;
-
-        return parent[a] = findParent(parent[a]);
-    }
-
-    public void union(int a,int b){
-        int ulpA = findParent(a);
-        int ulpB = findParent(b);
-
-        int sizeA = size[ulpA];
-        int sizeB = size[ulpB];
-
-        if(ulpA == ulpB)return;
-
-        if(sizeA < sizeB){
-            parent[ulpA] = ulpB;
-            size[ulpB] += sizeA;
-        }
-        else{
-            parent[ulpB] = ulpA;
-            size[ulpA] += sizeB;
-        }
-
-        cnt--;
-    }
-}
 class Solution {
     public int findCircleNum(int[][] isConnected) {
+        List<List<Integer>> adj = new ArrayList<>();
         int n = isConnected.length;
-        Dsu dsu = new Dsu(n);
+
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
 
         for(int i=0;i<n;i++){
             for(int j=0;j<n;j++){
-                if(isConnected[i][j] == 1)dsu.union(i,j);
+                if(i != j && isConnected[i][j] == 1){
+                    adj.get(i).add(j);
+                }
             }
         }
 
-        return dsu.cnt;
+        boolean[] vis = new boolean[n];
+
+        int cnt = 0;
+        for(int i=0;i<n;i++){
+            if(!vis[i]){
+                dfs(i,vis,adj);
+                cnt++;
+            }
+        }
+
+        return cnt;
+    }
+
+    public void dfs(int node,boolean[] vis,List<List<Integer>> adj){
+        vis[node] = true;
+
+        for(int adjNode : adj.get(node)){
+            if(!vis[adjNode])dfs(adjNode,vis,adj);
+        }
     }
 }
