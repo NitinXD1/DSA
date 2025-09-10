@@ -5,12 +5,9 @@ class Solution {
         HashMap<Integer,Set<Integer>> hash = new HashMap<>();
 
         for(int i=1;i<=languages.length;i++){
-            hash.put(i,new HashSet<>());
-        }
-
-        for (int i = 0; i < languages.length; i++) {
-            Set<Integer> set = Arrays.stream(languages[i]).boxed().collect(Collectors.toSet());
-            hash.put(i + 1, set);
+            Set<Integer> st = new HashSet<>();
+            fillSet(st,languages[i-1]);
+            hash.put(i,st);
         }
 
         for(int[] i : friendships){
@@ -40,6 +37,12 @@ class Solution {
         }
 
         return min;
+    }
+
+    public void fillSet(Set<Integer> st,int[] arr){
+        for(int i:arr){
+            st.add(i);
+        }
     }
 
     public int helper(HashMap<Integer,Set<Integer>> hash,int lang,Set<Integer> badUsers){
