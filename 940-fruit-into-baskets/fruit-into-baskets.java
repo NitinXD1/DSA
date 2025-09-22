@@ -1,31 +1,29 @@
 class Solution {
-    public int totalFruit(int[] nums) {
+    public int totalFruit(int[] fruits) {
+        int cnt = 0;
+        HashMap<Integer,Integer> hash = new HashMap<>();
+
         int left = 0;
         int right = 0;
+        int n = fruits.length;
 
-        int n = nums.length;
-        int max = 0;
-        int cnt = 0;
-
-        int[] hash = new int[100001];
-
+        int ans = 0;
         while(right < n){
-            if(hash[nums[right]] == 0)cnt++;
-            hash[nums[right]]++;
+            hash.put(fruits[right],hash.getOrDefault(fruits[right],0)+1);
 
-            while(cnt > 2){
-                hash[nums[left]]--;
-                if(hash[nums[left]] == 0)cnt--;
+            while(hash.size() > 2){
+                hash.put(fruits[left],hash.get(fruits[left]) - 1);
+                if(hash.get(fruits[left]) == 0){
+                    hash.remove(fruits[left]);
+                }
                 left++;
             }
 
-            if(cnt <= 2){
-                max = Math.max(right - left + 1,max);
-            }
+            ans = Math.max(ans,right - left + 1);
 
             right++;
         }
 
-        return max;
+        return ans;
     }
 }
