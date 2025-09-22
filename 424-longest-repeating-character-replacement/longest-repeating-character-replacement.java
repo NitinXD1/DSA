@@ -1,11 +1,10 @@
 class Solution {
     public int characterReplacement(String s, int k) {
+        int ans = 0;
+        int n = s.length();
         int left = 0;
         int right = 0;
-
-        int n = s.length();
         int[] hash = new int[26];
-        int ans = 0;
         int maxf = 0;
 
         while(right < n){
@@ -20,7 +19,7 @@ class Solution {
             if((right - left) + 1 - maxf <= k){
                 ans = Math.max(ans,(right - left)+1);
             }
-            
+
             right++;
         }
 
