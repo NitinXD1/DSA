@@ -3,12 +3,13 @@ class Solution {
         int buy = prices[0];
         int n = prices.length;
 
-        int max = 0;
+        int ans = 0;
+
         for(int i=1;i<n;i++){
-            max = Math.max(max,prices[i] - buy);
-            buy = Math.min(prices[i],buy);
+            ans = Math.max(ans,prices[i] - buy);
+            buy = Math.min(buy,prices[i]);
         }
 
-        return max;
+        return ans;
     }
 }
