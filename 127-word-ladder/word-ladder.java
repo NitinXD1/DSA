@@ -1,43 +1,48 @@
 class Solution {
-    public int ladderLength(String begin, String end, List<String> wordList) {
-        HashSet<String> st = new HashSet<>();
+    
+    class Pair{
+        String s;
+        int steps;
 
-        for(String word : wordList)st.add(word);
-        if(!st.contains(end))return 0;
+        Pair(String s,int steps){
+            this.s = s;
+            this.steps = steps;
+        }
+    }
 
-        Queue<String> q = new LinkedList<>();
-        q.offer(begin);
-        int cnt = 1;
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        Queue<Pair> q = new LinkedList<>();
+        Set<String> st = new HashSet<>();
+
+        for(String str : wordList)st.add(str);
+
+        if(!st.contains(endWord) || beginWord == endWord)return 0;
+
+        q.offer(new Pair(beginWord,1));
 
         while(!q.isEmpty()){
-            int size = q.size();
+            Pair p = q.poll();
+            String curr = p.s;
+            int s = p.steps;
 
-            for(int k=0;k<size;k++){
-                String str = q.poll();
+            char[] arr = curr.toCharArray();
 
-                if(str.equals(end))return cnt;
+            if(curr.equals(endWord))return s;
 
-                int n = str.length();
-                char[] arr = str.toCharArray();
+            for(int i=0;i<arr.length;i++){
+                char currChar = arr[i];
 
-                for(int i=0;i<n;i++){
-                    char original = arr[i];
-                    for(char ch='a';ch<='z';ch++){
+                for(char ch='a';ch<='z';ch++){
+                    if(ch != currChar){
                         arr[i] = ch;
-
                         String newStr = new String(arr);
-
-                        if(st.contains(newStr)){
-                            q.offer(newStr);
-                            st.remove(newStr);
-                        }
+                        if(st.contains(newStr))q.offer(new Pair(newStr,s+1)); 
+                        st.remove(newStr);
                     }
-                    arr[i] = original;
-                } 
+                }
 
-            }
-            
-            cnt++;
+                arr[i] = currChar;
+            } 
         }
 
         return 0;
