@@ -1,39 +1,44 @@
 class Solution {
-    public boolean canFinish(int numCourses, int[][] preq) {
+    public boolean canFinish(int n, int[][] prereq) {
         List<List<Integer>> adj = new ArrayList<>();
-
-        for(int i=0;i<numCourses;i++){
+        
+        for(int i=0;i<n;i++){
             adj.add(new ArrayList<>());
         }
 
-        for(int[] i:preq){
+        for(int[] i:prereq){
             adj.get(i[1]).add(i[0]);
         }
 
-        boolean[] vis = new boolean[numCourses];
-        boolean[] pathVis = new boolean[numCourses];
+        Stack<Integer> st = new Stack<>();
+        boolean[] vis = new boolean[n];
+        boolean[] currVis = new boolean[n];
 
-        for(int i=0;i<numCourses;i++){
+        for(int i=0;i<n;i++){
             if(!vis[i]){
-                if(!helper(i,vis,adj,pathVis))return false;
+                if(!helper(i,adj,st,vis,currVis))return false;
             }
         }
 
-        return true;
+        return st.size() == n;
     }
 
-    public boolean helper(int index,boolean[] vis,List<List<Integer>> adj,boolean[] pathVis){
-        vis[index] = true;
-        pathVis[index] = true;
-
-        for(int adjIndex : adj.get(index)){
-            if(!vis[adjIndex]){
-                if(!helper(adjIndex,vis,adj,pathVis))return false;
+    public boolean helper(int node,List<List<Integer>> adj,Stack<Integer> st,boolean[] vis,boolean[] currVis){
+        vis[node] = true;
+        currVis[node] = true;
+        
+        for(int adjNode : adj.get(node)){
+            if(!vis[adjNode]){
+                if(!helper(adjNode,adj,st,vis,currVis))return false;
             }
-            else if(pathVis[adjIndex])return false;
+            else if(currVis[adjNode]){
+                return false;
+            }
         }
 
-        pathVis[index] = false;
+        st.add(node);
+        currVis[node] = false;
+
         return true;
     }
 }
