@@ -1,25 +1,20 @@
 class Solution {
     public int uniquePaths(int m, int n) {
         int[][] dp = new int[m][n];
-        
-        for(int i=0;i<m;i++){
-            dp[i][0] = 1;
-        }
+        for(int[] i:dp)Arrays.fill(i,-1);
+        return helper(0,0,m,n,dp);
+    }
 
-        for(int i=0;i<n;i++){
-            dp[0][i] = 1;
-        }
-        
-        for(int i=1;i<m;i++){
-            for(int j=1;j<n;j++){
+    public int helper(int r,int c,int m,int n,int[][] dp){
+        if(r == m || c == n)return 0;
 
-                int down = dp[i-1][j];
-                int right = dp[i][j-1];
+        if(r == m-1 && c == n-1)return 1;
 
-                dp[i][j] = down + right;
-            }
-        }
+        if(dp[r][c] != -1)return dp[r][c];
 
-        return dp[m-1][n-1];
+        int down = helper(r+1,c,m,n,dp);
+        int right = helper(r,c+1,m,n,dp);
+
+        return dp[r][c] = down+right;
     }
 }
