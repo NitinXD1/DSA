@@ -3,22 +3,21 @@ class Solution {
         int n = nums.length;
         int[][] dp = new int[n+1][n+1];
 
-        for(int[] i:dp)Arrays.fill(i,-1);
+        for(int i=n-1;i>=0;i--){
+            for(int j=i-1;j>=-1;j--){
 
-        return helper(0,-1,nums,dp);
-    }
+                int skip = dp[i+1][j+1];
+                int take = 0;
 
-    public int helper(int curr,int prev,int[] nums,int[][] dp){
-        if(curr == nums.length)return 0;
+                if(j == -1 || nums[j] < nums[i]){
+                    take = 1 + dp[i+1][i+1];
+                }
 
-        if(dp[curr+1][prev+1] != -1)return dp[curr+1][prev+1];
-
-        int skip = helper(curr+1,prev,nums,dp);
-        int take = 0;
-        if(prev == -1 || nums[curr] > nums[prev]){
-            take = 1 + helper(curr+1,curr,nums,dp);
+                dp[i][j+1] = Math.max(take,skip);
+            }
         }
+        
+        return dp[0][0];
 
-        return dp[curr+1][prev+1] = Math.max(skip,take);
     }
 }
