@@ -8,8 +8,6 @@ class Solution {
         Arrays.sort(nums);
         rev(nums);
 
-        System.out.println(Arrays.toString(nums));
-
         long ans = 0;
 
         int i = 0;
