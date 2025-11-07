@@ -1,2 +1,12 @@
-# Write your MySQL query statement below
-Select MAX(salary) as SecondHighestSalary from Employee WHERE salary NOT IN(Select MAX(salary) from Employee);
+SELECT 
+    (
+        SELECT salary
+        FROM (
+            SELECT 
+                salary,
+                DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk
+            FROM Employee
+        ) AS Ranked
+        WHERE rnk = 2
+        LIMIT 1
+    ) AS SecondHighestSalary;
