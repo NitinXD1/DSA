@@ -54,14 +54,21 @@ class Solution {
         int n = nums.length;
         int[] ans = new int[n];
 
-        int[] freq = new int[101];
-        for(int i:nums)freq[i]++;
+        int[] copy = nums.clone();
+        Arrays.sort(copy);
+        HashMap<Integer,Integer> hash = new HashMap<>();
+
+        int index = 0;
+        for(int i:copy)if(!hash.containsKey(i))hash.put(i,index++);
+
+        int[] freq = new int[index];
+        for(int i:copy)freq[hash.get(i)]++;
 
         SegmentTree sg = new SegmentTree(freq);
 
         for(int i=0;i<n;i++){
-            int x = nums[i];
-            if(x != 0)ans[i] = sg.query(0,0,100,0,x-1);
+            int x = hash.get(nums[i]);
+            if(x != 0)ans[i] = sg.query(0,0,index-1,0,x-1);
         }
 
         return ans;
