@@ -3,6 +3,7 @@ class Solution {
         int sum = 0;
         ArrayList<Integer> r1 = new ArrayList<>();
         ArrayList<Integer> r2 = new ArrayList<>();
+        Arrays.sort(nums);
         
         for (int x : nums) {
             sum += x;
@@ -11,9 +12,6 @@ class Solution {
         }
         
         if (sum % 3 == 0) return sum;
-        
-        Collections.sort(r1);
-        Collections.sort(r2);
         
         int rem = sum % 3;
         int ans = 0;
