@@ -17,7 +17,6 @@ class Solution {
             int r = curr[0];
             int c = curr[1];
             int e = curr[2];
-            System.out.println(e);
 
             if(vis[r][c])continue;
 
