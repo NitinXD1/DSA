@@ -5,7 +5,9 @@ class Solution {
 
         PriorityQueue<int[]> pq = new PriorityQueue<>((a,b) -> Integer.compare(a[2],b[2]));
 
-        boolean[][] vis = new boolean[n][m];
+        int[][] dist = new int[n][m];
+        for(int[] i:dist)Arrays.fill(i,Integer.MAX_VALUE);
+        dist[0][0] = 0;
 
         pq.offer(new int[]{0,0,0});
 
@@ -18,19 +20,20 @@ class Solution {
             int c = curr[1];
             int e = curr[2];
 
-            if(vis[r][c])continue;
+            if(dist[r][c] > e)continue;
 
             if(r == n-1 && c == m-1)return e;
-
-            vis[r][c] = true;
 
             for(int i=0;i<4;i++){
                 int adjR = r + drow[i];
                 int adjC = c + dcol[i];
 
-                if(adjR >= 0 && adjC < m && adjC >= 0 && adjR < n && !vis[adjR][adjC]){       
+                if(adjR >= 0 && adjC < m && adjC >= 0 && adjR < n){       
                     int nextE = Math.max(e,Math.abs(grid[r][c] - grid[adjR][adjC]));
-                    pq.offer(new int[]{adjR,adjC,nextE});
+                    if(dist[adjR][adjC] > nextE){
+                        pq.offer(new int[]{adjR,adjC,nextE});
+                        dist[adjR][adjC] = nextE;
+                    }
                 }
             }
         }
